@@ -1,0 +1,11 @@
+name: IntegrativePythonProject
+description: Integrative Python Project with AWS - DevOps course 2025
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
