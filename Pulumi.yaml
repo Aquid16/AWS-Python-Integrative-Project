@@ -1,5 +1,5 @@
 name: IntegrativePythonProject
-description: Integrative Python Project with AWS - DevOps course 2025
+description: A minimal AWS Python Pulumi program
 runtime:
   name: python
   options:
@@ -9,3 +9,4 @@ config:
   pulumi:tags:
     value:
       pulumi:template: aws-python
+main: manage.py
