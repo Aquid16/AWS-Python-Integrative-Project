@@ -1,0 +1,5 @@
+instance-type : t4g.nano
+ubuntu-image-id : ami-0a7a4e87939439934
+amazon-linux-image-id : ami-0f37c4a1ba152af46
+security-group : sg-0b779267b4b8ad388
+subnet-id: subnet-0bee75ddd0f0392e7

@@ -2,9 +2,10 @@ from my_config import get_args
 
 args = get_args()
 
-if args.resource == "create-instance":
-    import ec2_create
-# elif args.resource == "create-bucket":
-#     import s3_create
-# elif args.resource == "create-zone":
-#     import zone_create
+match args.resource:
+    case "create-instance" | "list-instances" | "manage-instance": #| "terminate-instance":
+        import ec2
+    case "create-bucket" | "list-buckets" | "upload-file": #| "delete-bucket":
+        import s3
+    case "create-zone" | "update-record" | "delete-record": #| "delete-zone" :
+        import route53

@@ -1,0 +1,5 @@
+instance-type : t3.nano
+ubuntu-image-id : ami-04b4f1a9cf54c11d0
+amazon-linux-image-id : ami-05b10e08d247fb927
+security-group : sg-0b779267b4b8ad388
+subnet-id: subnet-0bee75ddd0f0392e7
