@@ -7,5 +7,5 @@ match args.resource:
         import ec2
     case "create-bucket" | "list-buckets" | "upload-file" | "delete-bucket":
         import s3
-    case "create-zone" | "update-record" | "delete-record": #| "delete-zone" :
+    case "create-zone" | "update-record" | "delete-record" | "delete-zone" :
         import route53

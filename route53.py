@@ -65,16 +65,16 @@ def create_zone():
     except Exception as e:
         print(e)
 
-# def delete_zone():
-#     try:
-#         route53.delete_hosted_zone(
-#             Id=args.id
-#         )
-#
-#         print(f"Hosted Zone {args.id} was deleted successfully!")
-#
-#     except Exception as e:
-#         print(e)
+def delete_zone():
+    try:
+        route53.delete_hosted_zone(
+            Id=args.id
+        )
+
+        print(f"Hosted Zone {args.id} was deleted successfully!")
+
+    except Exception as e:
+        print(e)
 
 def update_record():
     try:
@@ -148,5 +148,5 @@ match args.resource:
     case "delete-record":
         delete_record()
 
-    # case "delete-zone":
-    #     delete_zone()
+    case "delete-zone":
+        delete_zone()

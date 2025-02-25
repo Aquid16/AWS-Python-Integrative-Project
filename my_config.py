@@ -71,14 +71,14 @@ def get_args():
     update_zone.add_argument("--new-value", type=str, required=True,
                              help="*(Required) The new value of the record you want to update/modify")
 # ------------
-#     delete_record = subparser.add_parser("delete-record", help="Delete a record inside the DNS zone")
-#     delete_record.add_argument("--id", type=str, required=True,
-#                                help="*(Required) The ID of the DNS zone you want to delete")
-#     delete_record.add_argument("--domain-name", type=str, required=True,
-#                                help="*(Required) The domain name of the DNS zone you want to delete")
-#     delete_record.add_argument("--type", type=str, required=True,
-#                                help="*(Required) The type of record you want to delete")
-#     delete_record.add_argument("--values", type=str, required=True,
-#                                help="*(Required) A list of exact values the record you want to delete has")
+    delete_record = subparser.add_parser("delete-record", help="Delete a record inside the DNS zone")
+    delete_record.add_argument("--id", type=str, required=True,
+                               help="*(Required) The ID of the DNS zone you want to delete")
+    delete_record.add_argument("--domain-name", type=str, required=True,
+                               help="*(Required) The domain name of the DNS zone you want to delete")
+    delete_record.add_argument("--type", type=str, required=True,
+                               help="*(Required) The type of record you want to delete")
+    delete_record.add_argument("--values", type=str, required=True,
+                               help="*(Required) A list of exact values the record you want to delete has")
 
     return parser.parse_args()
