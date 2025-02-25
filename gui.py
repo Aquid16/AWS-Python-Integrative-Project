@@ -1,28 +1,57 @@
+import tkinter
+import subprocess
+import os
+
 from tkinter import *
 from tkinter import ttk
-#import sys
-import os
+
+# from awscli.testutils import capture_output
+#
+# from ec2 import list_instances
+
 
 def open_ec2_window():
     ec2_management_window = Toplevel(main_window)
 
     ec2_management_window.title("EC2 Management Window")
-    ec2_frm = ttk.Frame(ec2_management_window, padding=10)
+    ec2_frm = ttk.Frame(ec2_management_window, padding=20)
     ec2_frm.grid()
 
     Label(ec2_frm, text="EC2 Management Window").grid(column=0, row=0)
 
-    btn = Button(ec2_frm, text="Create Instance")
+    create_btn = Button(ec2_frm, text="Create Instance")
+    list_btn = Button(ec2_frm, text="List Instances")
 
-    btn.bind("<Button>", lambda e: ec2_creation(ec2_frm))
+    create_btn.bind("<Button>", lambda e: ec2_creation(ec2_frm))
+    list_btn.bind("<Button>", lambda e: ec2_listing(ec2_frm))
 
-    btn.grid(column=0, row=1)
+    create_btn.grid(column=0, row=1)
+    list_btn.grid(column=0, row=2)
+
+def open_s3_window():
+    return
+
+def open_route53_window():
+    return
 
 def create_instance(ins_type, ins_os, ins_name, ins_amount):
-    print(ins_amount)
     os.system(f'python manage.py create-instance --type {ins_type} --os {ins_os}'
               f' --name {ins_name} --amount {ins_amount}')
-    #os.system('python manage.py create-instance --type t3.nano --os ubuntu --name sharon --amount 1')
+
+def list_instances(text):
+    try:
+        result = subprocess.run(['python', 'manage.py', 'list-instances'], capture_output=True, text=True)
+
+        if result.returncode == 0:
+            instances = result.stdout.splitlines()
+
+        text.delete(1.0, tkinter.END)
+
+        for instance in instances:
+            text.insert(tkinter.END, instance + "\n")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
 def ec2_creation(ec2_frm):
 
@@ -63,14 +92,28 @@ def ec2_creation(ec2_frm):
     option_menu3.grid(column=1, row=3)
     btn.grid(columnspan=2)
 
+def ec2_listing(ec2_frm):
+    for widget in ec2_frm.winfo_children():
+        widget.destroy()
+
+    label = ttk.Label(ec2_frm, text="EC2 Management")
+    btn = ttk.Button(ec2_frm, text="List EC2 Instances", command= lambda: list_instances(output_text))
+    output_text = tkinter.Text(ec2_frm, height=10, width=80)
+
+    label.grid(columnspan=4)
+    btn.grid(columnspan=4)
+    output_text.grid(columnspan=4)
+
 # Main Window
 main_window = Tk()
 main_window.title("AWS Management Tool")
 main_window.configure(background='black')
 
-main_frm = ttk.Frame(main_window, padding=100)
+main_frm = ttk.Frame(main_window, padding=20)
 main_frm.grid()
 ttk.Label(main_frm, text="AWS Management Tool").grid(column=0, row=0)
 ttk.Button(main_frm, text="EC2 Management", command=open_ec2_window).grid(column=0, row=1)
+ttk.Button(main_frm, text="S3 Management", command=open_s3_window).grid(column=0, row=2)
+ttk.Button(main_frm, text="Route53 Management", command=open_route53_window()).grid(column=0, row=3)
 
 main_window.mainloop()

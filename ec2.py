@@ -137,7 +137,7 @@ def list_instances():
         for ins in reservation["Instances"]:
             if (ins['State']['Name'] == 'running' or ins['State']['Name'] == 'stopped'
                     or ins['State']['Name'] == 'stopping'):
-                print(f"Instance: {ins['InstanceId']}, State: {ins['State']['Name']}")
+                print(f"Instance: {ins['InstanceId']}, Type: {ins['InstanceType']}, State: {ins['State']['Name']}")
 
 def manage_instance():
     ec2_tags = ec2_inst.describe_tags(
