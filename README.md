@@ -24,7 +24,7 @@ Before you begin, ensure you have the following:
 Clone this repository:
 
 ```bash
-git clone [https://github.com/DolevTB/PyhtonProject.git](https://github.com/Aquid16/AWS-Python-Integrative-Project.git)
+git clone https://github.com/Aquid16/AWS-Python-Integrative-Project.git
 cd AWS-Python-Integrative-Project
 ```
 
