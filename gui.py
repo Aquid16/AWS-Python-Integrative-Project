@@ -7,12 +7,22 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 
+def center_window(window, width=300, height=200):
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+
+    x = (screen_width // 2) - (width // 2)
+    y = (screen_height // 2) - (height // 2)
+
+    window.geometry(f"{width}x{height}+{x}+{y}")
+
 def open_ec2_window():
     ec2_management_window = Toplevel(main_window)
+    center_window(ec2_management_window, 600, 400)
 
     ec2_management_window.title("EC2 Management Window")
-    ec2_frm = ttk.Frame(ec2_management_window, padding=60)
-    ec2_frm.grid()
+    ec2_frm = ttk.Frame(ec2_management_window)
+    ec2_frm.place(relx=.5, rely=.5, anchor="center")
 
     Label(ec2_frm, text="EC2 Management Window").grid(column=0, row=0)
 
@@ -33,10 +43,11 @@ def open_ec2_window():
 
 def open_s3_window():
     s3_management_window = Toplevel(main_window)
+    center_window(s3_management_window, 600, 400)
 
     s3_management_window.title("S3 Management Window")
-    s3_frm = ttk.Frame(s3_management_window, padding=60)
-    s3_frm.grid()
+    s3_frm = ttk.Frame(s3_management_window)
+    s3_frm.place(relx=.5, rely=.5, anchor="center")
 
     Label(s3_frm, text="S3 Management Window").grid(column=0, row=0)
 
@@ -57,10 +68,11 @@ def open_s3_window():
 
 def open_route53_window():
     route53_management_window = Toplevel(main_window)
+    center_window(route53_management_window, 600, 400)
 
     route53_management_window.title("Route53 Management Window")
-    route53_frm = ttk.Frame(route53_management_window, padding=60)
-    route53_frm.grid()
+    route53_frm = ttk.Frame(route53_management_window)
+    route53_frm.place(relx=.5, rely=.5, anchor="center")
 
     Label(route53_frm, text="Route53 Management Window").grid(column=0, row=0)
 
@@ -80,11 +92,24 @@ def open_route53_window():
     zone_delete_btn.grid(column=0, row=4)
 
 def create_instance(ins_type, ins_os, ins_name, ins_amount):
-    os.system(f'python manage.py create-instance --type {ins_type} --os {ins_os}'
-              f' --name {ins_name} --amount {ins_amount}')
+    result = subprocess.run(['python', 'manage.py', 'create-instance', '--type', f'{ins_type}', '--os', f'{ins_os}'
+                             , '--name', f'{ins_name}', '--amount', f'{ins_amount}'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message="Instance was successfully created!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def destroy_instance(ins_id):
-    os.system(f'python manage.py terminate-instance --instance-id {ins_id}')
+    result = subprocess.run(['python', 'manage.py', 'terminate-instance', '--instance-id', f'{ins_id}'],
+                            capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"Instance {ins_id} was successfully terminated!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def list_instances(text):
     try:
@@ -102,13 +127,34 @@ def list_instances(text):
         print(f"An error occurred: {str(e)}")
 
 def start_instance(ins_id):
-    os.system(f'python manage.py manage-instance --instance-id {ins_id} --operation start')
+    result = subprocess.run(['python', 'manage.py', 'manage-instance', '--instance-id', f'{ins_id}',
+                             '--operation', 'start'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"Instance {ins_id} was successfully Started!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def stop_instance(ins_id):
-    os.system(f'python manage.py manage-instance --instance-id {ins_id} --operation stop')
+    result = subprocess.run(['python', 'manage.py', 'manage-instance', '--instance-id', f'{ins_id}',
+                             '--operation', 'stop'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"Instance {ins_id} was successfully Stopped!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def create_zone(name, domain):
-    os.system(f'python manage.py create-zone --name {name} --domain {domain}')
+    result = subprocess.run(['python', 'manage.py', 'create-zone', '--name', f'{name}', '--domain', f'{domain}']
+                            , capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message="DNS Zone was successfully Created!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def ec2_creation(ec2_frm):
 
@@ -238,9 +284,11 @@ def create_bucket(name, access):
                 result = subprocess.run(command, input="yes", capture_output=True, text=True)
 
                 if result.returncode == 0:
+                    tkinter.messagebox.showinfo(title="Success", message="Public S3 Bucket was successfully Created!")
                     return result.stdout
 
                 else:
+                    tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
                     return f"Error: {result.stderr}"
 
             else:
@@ -248,6 +296,14 @@ def create_bucket(name, access):
 
         else:
             os.system(f'python manage.py create-bucket --name {name} --access {access}')
+            result = subprocess.run(['python', 'manage.py', 'create-bucket', '--name', f'{name}',
+                                     '--access', f'{access}'], capture_output=True, text=True)
+
+            if result.returncode == 0:
+                tkinter.messagebox.showinfo(title="Success", message="Private S3 Bucket was successfully Created!")
+
+            else:
+                tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
     except Exception as e:
         return f"An error occurred: {str(e)}"
@@ -269,9 +325,26 @@ def list_buckets(text):
 
 def destroy_bucket(name):
     os.system(f'python manage.py delete-bucket --name {name}')
+    result = subprocess.run(['python', 'manage.py', 'delete-bucket', '--name', f'{name}'],
+                            capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"S3 Bucket: {name} was successfully Deleted!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def upload_file(file_path, name):
     os.system(f'python manage.py upload-file --path "{file_path}" --name {name} --key "uploads/{file_path.split("/")[-1]}"')
+    result = subprocess.run(['python', 'manage.py', 'upload-file', '--path', f'"{file_path}"', '--name',
+                             f'{name}', '--key', f'"uploads/{file_path.split("/")[-1]})"'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"File {file_path.split('/')[-1]} was successfully "
+                                                             f"uploaded to {name} S3 Bucket!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def browse():
     file = tkinter.filedialog.askopenfilename(title="Select a File",
@@ -282,8 +355,16 @@ def browse():
     return file_path
 
 def update_record(zone_id, domain_name, record_type, new_value):
-    os.system(f'python manage.py update-record --id {zone_id} --domain-name {domain_name} --type {record_type} '
-              f'--new-value {new_value}')
+    result = subprocess.run(['python', 'manage.py', 'update-record', '--id', f'{zone_id}',
+                             '--domain-name', f'{domain_name}', '--type', f'{record_type}',
+                             '--new-value', f'{new_value}'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"A Record in DNS Zone {domain_name} was "
+                                                             f"successfully Updated!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def add_value_to_delete(value_to_add, values_entry):
     values.append(value_to_add)
@@ -294,9 +375,26 @@ def add_value_to_delete(value_to_add, values_entry):
 def delete_record(zone_id, domain_name, record_type, delete_values):
     os.system(f'python manage.py delete-record --id {zone_id} --domain-name {domain_name} '
               f'--type {record_type} --values {delete_values}')
+    result = subprocess.run(['python', 'manage.py', 'delete-record', '--id', f'{zone_id}',
+                             '--domain-name', f'{domain_name}'], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"A Record in DNS Zone {domain_name} was "
+                                                             f"successfully Deleted!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def delete_zone(zone_id):
     os.system(f'python manage.py delete-zone --id {zone_id}')
+    result = subprocess.run(['python', 'manage.py', 'delete-zone', '--id', f'{zone_id}'],
+                            capture_output=True, text=True)
+
+    if result.returncode == 0:
+        tkinter.messagebox.showinfo(title="Success", message=f"DNS Zone {zone_id} was successfully Deleted!")
+
+    else:
+        tkinter.messagebox.showerror(title="Failed", message=f'{result.stderr}')
 
 def s3_creation(s3_frm):
     for widget in s3_frm.winfo_children():
@@ -518,10 +616,10 @@ def route53_zone_destruction(route53_frm):
 # Main Window
 main_window = Tk()
 main_window.title("AWS Management Tool")
-main_window.configure(background='black')
+center_window(main_window, 600, 600)
 
-main_frm = ttk.Frame(main_window, padding=60)
-main_frm.grid()
+main_frm = ttk.Frame(main_window, width=200, height=100)
+main_frm.place(relx=.5, rely=.5, anchor="center")
 ttk.Label(main_frm, text="AWS Management Tool").grid(column=0, row=0)
 ttk.Button(main_frm, text="EC2 Management", command=open_ec2_window).grid(column=0, row=1)
 ttk.Button(main_frm, text="S3 Management", command=open_s3_window).grid(column=0, row=2)
