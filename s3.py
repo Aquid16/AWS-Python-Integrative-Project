@@ -123,22 +123,22 @@ def upload_file():
     except Exception as e:
         print(e)
 
-# def delete_bucket():
-#     try:
-#         tagging_response = s3.get_bucket_tagging(
-#             Bucket=args.name
-#         )
-#         s3_tags = tagging_response['TagSet']
-#
-#         for tag in s3_tags:
-#             if tag['Key'] == REQUIRED_TAG_KEY and tag['Value'] == REQUIRED_TAG_VALUE:
-#                 s3.delete_bucket(
-#                     Bucket=args.name
-#                 )
-#                 print(f"Bucket {args.name} was deleted successfully")
-#
-#     except Exception as e:
-#         print(e)
+def delete_bucket():
+    try:
+        tagging_response = s3.get_bucket_tagging(
+            Bucket=args.name
+        )
+        s3_tags = tagging_response['TagSet']
+
+        for tag in s3_tags:
+            if tag['Key'] == REQUIRED_TAG_KEY and tag['Value'] == REQUIRED_TAG_VALUE:
+                s3.delete_bucket(
+                    Bucket=args.name
+                )
+                print(f"Bucket {args.name} was deleted successfully")
+
+    except Exception as e:
+        print(e)
 
 
 match args.resource:
@@ -151,5 +151,5 @@ match args.resource:
     case "upload-file":
         upload_file()
 
-    # case "delete-bucket":
-    #     delete_bucket()
+    case "delete-bucket":
+        delete_bucket()

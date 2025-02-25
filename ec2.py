@@ -175,31 +175,31 @@ def manage_instance():
     else:
         print("Tag was not found")
 
-# def terminate_instance():
-#     ec2_tags = ec2_inst.describe_tags(
-#         Filters=[
-#             {
-#                 'Name': 'resource-id',
-#                 'Values': [
-#                     args.instance_id
-#                 ]
-#             }
-#         ]
-#     )
-#
-#     tags = {tag['Key']: tag['Value'] for tag in ec2_tags['Tags']}
-#     if REQUIRED_TAG_KEY in tags:
-#         if tags[REQUIRED_TAG_KEY] == REQUIRED_TAG_VALUE:
-#             print("Tag was found")
-#             ec2_inst.terminate_instances(
-#                 InstanceIds=[
-#                     f'{args.instance_id}'
-#                 ]
-#             )
-#
-#             print(f"Instance {args.instance_id} is now being terminated!")
-#     else:
-#         print("Tag was not found")
+def terminate_instance():
+    ec2_tags = ec2_inst.describe_tags(
+        Filters=[
+            {
+                'Name': 'resource-id',
+                'Values': [
+                    args.instance_id
+                ]
+            }
+        ]
+    )
+
+    tags = {tag['Key']: tag['Value'] for tag in ec2_tags['Tags']}
+    if REQUIRED_TAG_KEY in tags:
+        if tags[REQUIRED_TAG_KEY] == REQUIRED_TAG_VALUE:
+            print("Tag was found")
+            ec2_inst.terminate_instances(
+                InstanceIds=[
+                    f'{args.instance_id}'
+                ]
+            )
+
+            print(f"Instance {args.instance_id} is now being terminated!")
+    else:
+        print("Tag was not found")
 
 
 args = get_args()
@@ -214,5 +214,5 @@ match args.resource:
     case "manage-instance":
         manage_instance()
 
-    # case "terminate-instance":
-    #     terminate_instance()
+    case "terminate-instance":
+        terminate_instance()

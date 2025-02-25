@@ -26,8 +26,8 @@ def get_args():
     manage_instance.add_argument("--operation", type=str, required=True,
                                  help="*(Required) The operation you want to perform on the instance (Start or Stop)")
 # ------------
-#     terminate_instance = subparser.add_parser("terminate-instance", help="Terminates an EC2 instance")
-#     terminate_instance.add_argument("--instance-id", type=str, required=True, help="The ID of the instance to be terminated")
+    terminate_instance = subparser.add_parser("terminate-instance", help="Terminates an EC2 instance")
+    terminate_instance.add_argument("--instance-id", type=str, required=True, help="The ID of the instance to be terminated")
 
     # S3 Subparser
     create_bucket = subparser.add_parser("create-bucket", help="Create an S3 bucket")
@@ -46,9 +46,9 @@ def get_args():
     upload_to_bucket.add_argument("--key", type=str, required=True,
                                   help="*(Required) The name of the file as it will be shown in the bucket")
 # -------------
-#     delete_bucket = subparser.add_parser("delete-bucket", help="Delete an S3 bucket")
-#     delete_bucket.add_argument("--name", type=str, required=True,
-#                                help="The name of the bucket you want to delete (Must include the prefix 'cli-')")
+    delete_bucket = subparser.add_parser("delete-bucket", help="Delete an S3 bucket")
+    delete_bucket.add_argument("--name", type=str, required=True,
+                               help="The name of the bucket you want to delete (Must include the prefix 'cli-')")
 
     # Route53 Subparser
     create_zone = subparser.add_parser("create-zone", help="Create a Route53 DNS zone")
