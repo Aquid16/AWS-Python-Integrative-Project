@@ -6,7 +6,7 @@ This project demonstrates the integration of various AWS services using Python. 
 
 ## Features
 
-- **Service Integration**: Showcases the seamless integration between services such as EC2, S3 and Route53 at of now.
+- **Service Integration**: Showcases the seamless integration between python to AWS services such as EC2, S3 and Route53 as of now.
 - **Automation**: Implements automation scripts for resource provisioning and management.
 - **Scalability**: Provides examples of scaling applications using AWS tools.
 - **Security**: Incorporates best practices for securing AWS resources and data.
